@@ -1,44 +1,26 @@
+import React from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./components/protected-route";
+import { CustomerModelsPage } from "./pages/customer/models-page";
+import { CustomerGraphicsPage } from "./pages/customer/graphics-page";
+import { LoginPage } from "./pages/auth/login-page";
+import { StudioPage } from "./pages/studio/studio-page";
+import { AdminModelsPage } from "./pages/admin/models-page";
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Navigate to="/shop" replace />, //vai pra vitreine
-  },
-  {
-    path: "/auth/login",
-    element: <div>Página de Login (Vamos construir depois)</div>,
-  },
-  {
-    path: "/shop",
-    element: <div>Vitrine da Loja (Área Pública)</div>,
-  },
+  { path: "/", element: <Navigate to="/customer/models" replace /> },
+  { path: "/auth/login", element: <LoginPage /> },
+  { path: "/customer/models", element: <CustomerModelsPage /> },
+  { path: "/customer/graphics", element: <CustomerGraphicsPage /> },
   {
     element: <ProtectedRoute />,
     children: [
-      {
-        path: "/studio",
-        element: <div>Estúdio de Personalização (Área Logada)</div>,
-      },
+      { path: "/studio", element: <StudioPage /> },
       {
         element: <ProtectedRoute allowedRoles={["ADMIN"]} />,
         path: "/admin",
-        children: [
-          {
-            path: "",
-            element: <div>Dashboard Administrativo</div>,
-          },
-          {
-            path: "customizables",
-            element: <div>Gestão de Produtos Personalizáveis</div>,
-          },
-          {
-            path: "graphics",
-            element: <div>Gestão de Estampas</div>,
-          }
-        ]
-      }
-    ]
-  }
+        children: [{ path: "models", element: <AdminModelsPage /> }],
+      },
+    ],
+  },
 ]);
